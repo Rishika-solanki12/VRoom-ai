@@ -9,7 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/genai": "^2.23.0",
+    "@google/generative-ai": "^0.24.1",
+    "@supabase/supabase-js": "^2.116.0",
+    "mammoth": "^1.12.3",
     "next": "16.3.5",
+    "pdf2json": "^4.1.0",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
