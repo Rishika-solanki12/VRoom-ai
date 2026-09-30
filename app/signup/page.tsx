@@ -14,13 +14,13 @@ export default function SignupPage() {
     setMessage("Creating account...");
 
     const { error } = await supabase.auth.signUp({
-      email,
+      email: email.trim(),
       password,
       options: {
         data: {
-          full_name: name,
+          full_name: name.trim(),
         },
-      },
+         emailRedirectTo: `${window.location.origin}/login?verified=true`,      },
     });
 
     if (error) {
@@ -29,7 +29,7 @@ export default function SignupPage() {
     }
 
     setMessage(
-      "Account created! Agar email confirmation on hai, to apna email verify karo."
+      "Account created! Please check your email and click the verification link."
     );
   }
 
