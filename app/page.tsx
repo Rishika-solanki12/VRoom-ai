@@ -9,21 +9,12 @@ export default function Home() {
           VRoom <span className="text-blue-400">AI</span>
         </Link>
 
-        <div className="flex items-center gap-3">
-          <Link
-            href="/login"
-            className="rounded-lg px-4 py-2 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
-          >
-            Log in
-          </Link>
-
-          <Link
-            href="/signup"
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold transition hover:bg-blue-500"
-          >
-            Get started
-          </Link>
-        </div>
+        <Link
+          href="/dashboard"
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold transition hover:bg-blue-500"
+        >
+          Open Dashboard
+        </Link>
       </nav>
 
       {/* Hero Section */}
@@ -47,19 +38,12 @@ export default function Home() {
             career opportunity.
           </p>
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+          <div className="mt-10">
             <Link
-              href="/signup"
-              className="rounded-xl bg-blue-600 px-6 py-3 text-center font-semibold transition hover:bg-blue-500"
+              href="/dashboard"
+              className="inline-block rounded-xl bg-blue-600 px-6 py-3 text-center font-semibold transition hover:bg-blue-500"
             >
               Start practicing
-            </Link>
-
-            <Link
-              href="/login"
-              className="rounded-xl border border-slate-700 px-6 py-3 text-center font-semibold text-slate-200 transition hover:bg-slate-800"
-            >
-              Already have an account?
             </Link>
           </div>
         </div>
