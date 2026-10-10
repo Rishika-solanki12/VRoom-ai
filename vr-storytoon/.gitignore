@@ -1,0 +1,50 @@
+﻿# Secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+**/venv/
+**/.venv/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+
+
+# Generated media
+backend/generated/
+generated/
+*.log
+
+# Editor files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Ignore all Python virtual environments, including nested ones
+**/venv*/
+**/.venv*/
+**/site-packages/
+
+backend/services/local_ltx/venv_gpu/
+**/venv_gpu/
+
+**/venv/
+**/venv_gpu/
+**/.venv/
+**/site-packages/
+
+backend/services/local_ltx/venv/
+

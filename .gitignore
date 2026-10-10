@@ -1,4 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+﻿# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
 /node_modules
@@ -39,4 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-vr-storytoon/
+
+# StoryToon Python environments
+vr-storytoon/backend/venv/
+vr-storytoon/backend/.venv/
+vr-storytoon/backend/**/venv/
+vr-storytoon/backend/**/venv_gpu/
+vr-storytoon/backend/**/site-packages/
+vr-storytoon/backend/**/__pycache__/
+vr-storytoon/backend/.env
+vr-storytoon/backend/.env.*
+vr-storytoon/generated/
+vr-storytoon/backend/generated/
