@@ -144,7 +144,7 @@ async function getJudge0Result(token: string) {
   }
 }
 
-async function waitForResult(token: string, maxWaitMs = 60000) {
+async function waitForResult(token: string, maxWaitMs = 25000) {
   const startedAt = Date.now();
 
   while (Date.now() - startedAt < maxWaitMs) {
@@ -211,7 +211,7 @@ export async function POST(request: NextRequest) {
 
     if (mode !== "submit") {
       const token = await submitToJudge0(languageId, code, stdin);
-      const result = await waitForResult(token, 60000);
+      const result = await waitForResult(token, 25000);
 
       return NextResponse.json({
         success: true,
@@ -231,46 +231,66 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const results = [];
+    // Run all submission test cases in parallel.
+    // The old sequential version could take 25–60 seconds PER test case
+    // when Judge0 was queued, making the UI look permanently stuck.
+    const results = await Promise.all(
+      testCases.map(async (testCase, index) => {
+        // The VRoom AI problem schema uses `expectedOutput`.
+        // `output` is also accepted for backward compatibility.
+        const expectedOutput = normalizeOutput(
+          testCase?.expectedOutput ?? testCase?.output ?? ""
+        );
 
-    for (let index = 0; index < testCases.length; index++) {
-      const testCase = testCases[index];
+        try {
+          const token = await submitToJudge0(
+            languageId,
+            code,
+            testCase?.input ?? ""
+          );
 
-      // The VRoom AI problem schema uses `expectedOutput`.
-      // `output` is also accepted for backward compatibility.
-      const expectedOutput = normalizeOutput(
-        testCase?.expectedOutput ?? testCase?.output ?? ""
-      );
+          const result = await waitForResult(token, 25000);
+          const formatted = formatResult(result);
 
-      const token = await submitToJudge0(
-        languageId,
-        code,
-        testCase?.input ?? ""
-      );
+          const actualOutput = normalizeOutput(formatted.stdout);
+          const accepted = formatted.statusId === 3;
+          const outputMatches = actualOutput === expectedOutput;
 
-      const result = await waitForResult(token, 60000);
-      const formatted = formatResult(result);
+          return {
+            testCase: index + 1,
+            input: testCase?.input ?? "",
+            expectedOutput,
+            actualOutput,
+            passed: accepted && outputMatches,
+            status: formatted.status,
+            stderr: formatted.stderr,
+            compile_output: formatted.compile_output,
+            message: formatted.message,
+            time: formatted.time,
+            memory: formatted.memory,
+          };
+        } catch (error) {
+          const message =
+            error instanceof Error
+              ? error.message
+              : "Test case execution failed.";
 
-      const actualOutput = normalizeOutput(formatted.stdout);
-
-      const statusId = formatted.statusId;
-      const accepted = statusId === 3;
-      const outputMatches = actualOutput === expectedOutput;
-
-      results.push({
-        testCase: index + 1,
-        input: testCase?.input ?? "",
-        expectedOutput,
-        actualOutput,
-        passed: accepted && outputMatches,
-        status: formatted.status,
-        stderr: formatted.stderr,
-        compile_output: formatted.compile_output,
-        message: formatted.message,
-        time: formatted.time,
-        memory: formatted.memory,
-      });
-    }
+          return {
+            testCase: index + 1,
+            input: testCase?.input ?? "",
+            expectedOutput,
+            actualOutput: "",
+            passed: false,
+            status: "Execution Error",
+            stderr: message,
+            compile_output: "",
+            message,
+            time: null,
+            memory: null,
+          };
+        }
+      })
+    );
 
     const passedCount = results.filter((item) => item.passed).length;
     const correct = passedCount === results.length;

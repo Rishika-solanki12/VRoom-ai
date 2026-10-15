@@ -1050,6 +1050,14 @@ export default function CodingPracticePage() {
     action: string,
     title: string
   ) => {
+    // Reviewing must use the code the learner has actually written.
+    if (action === "review" && !code.trim()) {
+      setAiTitle(title);
+      setAiResult("Please write your code in the editor first. Then click Review My Code, and VRoom AI will review that exact code for bugs, edge cases, and improvements.");
+      setActivePanel("editor");
+      return;
+    }
+
     setIsAiLoading(true);
     setAiTitle(title);
     setAiResult("");
@@ -1143,6 +1151,12 @@ export default function CodingPracticePage() {
       action: "hint",
     },
     {
+      icon: "code",
+      title: "Show Solution",
+      text: "See the complete correct solution with a short explanation.",
+      action: "solution",
+    },
+    {
       icon: "sparkles",
       title: "Explain",
       text: "Ask AI to explain the problem or your approach.",
@@ -1150,15 +1164,9 @@ export default function CodingPracticePage() {
     },
     {
       icon: "code",
-      title: "Review Code",
-      text: "Find bugs, edge cases and cleaner approaches.",
+      title: "Review My Code",
+      text: "Review the code you wrote in the editor. Find bugs, edge cases, and get corrected code when needed.",
       action: "review",
-    },
-    {
-      icon: "check",
-      title: "Complexity",
-      text: "Understand time and space complexity.",
-      action: "complexity",
     },
   ];
 
@@ -1753,7 +1761,8 @@ export default function CodingPracticePage() {
                       </p>
 
                       <p className="mt-1 text-xs leading-5 text-slate-400">
-                        Need help? Get Hint will show the complete correct solution.
+                        Start with a hint if you want a clue, or use Show Solution
+                        when you want the complete answer.
                       </p>
 
                       <button
@@ -2294,7 +2303,7 @@ export default function CodingPracticePage() {
               </h3>
 
               <p className="mt-1 text-xs leading-5 text-slate-500">
-                VRoom AI will explain your approach, suggest improvements, and help you build stronger problem-solving skills.
+                Use a hint, view the complete solution, or ask VRoom AI to review the code you wrote in the editor.
               </p>
             </div>
 

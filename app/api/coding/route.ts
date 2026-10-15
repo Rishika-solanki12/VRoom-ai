@@ -1166,6 +1166,53 @@ Return ONLY the hint text.
         break;
 
       // ==================================================
+      // COMPLETE SOLUTION
+      // ==================================================
+
+      case "solution":
+        instruction = `
+You are VRoom AI's coding teacher.
+
+The student explicitly requested the COMPLETE SOLUTION
+for the CURRENT problem.
+
+Programming language:
+${language}
+
+CURRENT PROBLEM:
+${problemText}
+
+STUDENT CODE:
+${code || "No code written yet."}
+
+Rules:
+
+1. Give the complete correct solution for the CURRENT problem.
+2. Use the requested programming language: ${language}.
+3. The code must correctly follow the CURRENT input format.
+4. Never use interactive prompts such as:
+   input("Enter a number: ")
+5. The program must print ONLY the required output.
+6. Do not give pseudo-code instead of code.
+7. Do not give a partial solution.
+8. Make sure the solution works for all valid test cases.
+9. Match the exact problem statement, examples, constraints,
+   and expected output.
+10. After the code, briefly explain the approach.
+11. Include time complexity and space complexity.
+12. If the student's code is useful, you may briefly explain
+    what was missing or incorrect, but do not let it replace
+    the complete correct solution.
+
+Return:
+- A clearly labelled solution code block.
+- A short explanation.
+- Time Complexity.
+- Space Complexity.
+`;
+        break;
+
+      // ==================================================
       // EXPLAIN
       // ==================================================
 
